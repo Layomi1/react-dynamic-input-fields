@@ -2,82 +2,84 @@ import React, { useState } from "react";
 import Button from "./components/Button";
 
 function App() {
-  const [serviceList, setServiceList] = useState([
-    { id: Date.now(), service: "" },
+  const [inputFields, setInputFields] = useState([
+    { name: "", age: "", id: Date.now() },
   ]);
-  console.log(serviceList);
-  const handleAddService = () => {
-    setServiceList((prev) => [...prev, { id: Date.now(), service: "" }]);
+
+  // product 2
+  const handleFormChange = (e, index) => {
+    let data = [...inputFields];
+    data[index][e.target.name] = e.target.value;
+    setInputFields(data);
   };
 
-  const handleRemoveService = (id) => {
-    setServiceList((prevItem) => prevItem.filter((item) => item.id !== id));
+  const addFields = () => {
+    let newField = { name: "", age: "" };
+    setInputFields([...inputFields, newField]);
   };
 
-  const handleServiceChange = (e, id) => {
-    const { name, value } = e.target;
-    setServiceList((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, [name]: value } : item))
-    );
+  const removeFields = (index) => {
+    let data = [...inputFields];
+    data.splice(index, 1);
+    setInputFields(data);
   };
 
+  const submit = (e) => {
+    e.preventDefault();
+    console.log(inputFields);
+  };
   return (
-    <form className="w-full h-screen flex justify-between p-[100px] my-0 ">
-      <section className="max-w-700 ">
-        <label htmlFor="service" className="font-semibold text-md ">
-          Service(s)
-        </label>
-
-        {serviceList.map((serviceItem) => (
-          <article
-            key={serviceItem.id}
-            className="flex mt-2 grow-2  w-full  gap-4"
-          >
-            <article className="flex flex-col gap-2 w-full">
-              <input
-                type="text"
-                name="service"
-                autoComplete="off"
-                className="border-1 p-[7px] bg-transparent border-[#dcdcdc] w-full pl-2 rounded-[5px]  focus:border-[rgb(0,208,255)] h-[35px] "
-                value={serviceItem.service}
-                onChange={(e) => handleServiceChange(e, serviceItem.id)}
-              />
-              {serviceList[serviceList.length - 1].id === serviceItem.id &&
-                serviceList.length < 4 && (
+    <section className=" flex flex-col pt-8 items-center w-full h-screen">
+      <h1 className="text-2xl">Dynamic Form</h1>
+      <form onSubmit={submit} className="flex px-8 items-center">
+        <div>
+          {inputFields.map((input, index) => (
+            <div key={index} className="">
+              <article className="flex items-center  mt-2">
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Name"
+                  className="border-1 border-black h-9 pl-1  "
+                  value={input.name}
+                  onChange={(e) => handleFormChange(e, index)}
+                />
+                <input
+                  type="text"
+                  name="age"
+                  placeholder="Age"
+                  className="border-1 border-black ml-2 pl-1 h-9"
+                  value={input.age}
+                  onChange={(e) => handleFormChange(e, index)}
+                />
+                {inputFields.length > 1 && (
                   <Button
-                    text="Add a Service"
-                    handleAction={handleAddService}
-                    isColor
+                    handleAction={() => removeFields(index)}
+                    text="Remove"
                   />
                 )}
-            </article>
-
-            <article className="flex flex-col items-start gap-4">
-              {serviceList.length > 1 && (
-                <Button
-                  text="Remove"
-                  handleAction={() => handleRemoveService(serviceItem.id)}
-                  isColor={false}
-                />
+              </article>
+              {index === inputFields.length - 1 && (
+                <article className=" flex mt-4 ">
+                  <Button handleAction={addFields} isColor text="Add More" />
+                </article>
               )}
-            </article>
-          </article>
-        ))}
-      </section>
-      <section className="ml-12 grow-1">
-        <h2 className="font-semibold">Output</h2>
-        <ul>
-          {serviceList.map(
-            (serviceItem) =>
-              serviceItem.service && (
-                <li key={serviceItem.id} className="list-disc">
-                  {serviceItem.service}
-                </li>
-              )
-          )}
-        </ul>
-      </section>
-    </form>
+            </div>
+          ))}
+        </div>
+
+        <section className="ml-12 grow-1">
+          <h2 className="font-semibold">Output</h2>
+          <ul>
+            {inputFields.map((input, index) => (
+              <li key={index} className="list-disc">
+                {input.name}: <span>{input.age}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </form>
+    </section>
   );
 }
 
