@@ -2,9 +2,7 @@ import React, { useState } from "react";
 import Button from "./components/Button";
 
 function App() {
-  const [inputFields, setInputFields] = useState([
-    { name: "", age: "", id: Date.now() },
-  ]);
+  const [inputFields, setInputFields] = useState([{ name: "", age: "" }]);
 
   // product 2
   const handleFormChange = (e, index) => {
