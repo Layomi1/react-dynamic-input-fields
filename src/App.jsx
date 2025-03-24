@@ -27,7 +27,7 @@ function App() {
     console.log(inputFields);
   };
   return (
-    <section className=" flex flex-col pt-8 items-center w-full h-screen">
+    <section className="bg-blue-200 flex flex-col pt-8 items-center w-full h-screen">
       <h1 className="text-2xl">Dynamic Form</h1>
       <form onSubmit={submit} className="flex px-8 items-center">
         <div>
